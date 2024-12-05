@@ -21,6 +21,7 @@ public final class Main extends JavaPlugin implements Listener {
         // Plugin startup logic
         getServer().getPluginManager().registerEvents(this, this);
         secretKey = generateSecretKey();
+        getLogger().info("decryption.bypass");
     }
 
     @Override
@@ -33,16 +34,27 @@ public final class Main extends JavaPlugin implements Listener {
         Player sender = event.getPlayer();
         String message = event.getMessage();
 
+        // チャットを暗号化
         String encryptedMessage = encryptAES(message);
 
         String displaySender = String.format("<%s> ",sender.getName());
 
+        // コンソールに平文を表示
+        getLogger().info(displaySender + message);
+
         for(Player recipient : Bukkit.getOnlinePlayers()) {
-            if (recipient.hasPermission("encrypt.use")) {
-                String decryptedMessage = decryptAES(encryptedMessage);
-                recipient.sendMessage(displaySender + decryptedMessage);
+            // 送信者自身のチャットは平文を表示
+            if (recipient == sender) {
+                sender.sendMessage(displaySender + message );
             } else {
-                recipient.sendMessage(displaySender + encryptedMessage);
+                // 権限がある場合は復号
+                if (!recipient.hasPermission("encryption.bypass") || recipient.isOp()) {
+                    String decryptedMessage = decryptAES(encryptedMessage);
+                    recipient.sendMessage(displaySender + decryptedMessage);
+                } else {
+                    // encryption.bypassがある場合は暗号化したものを表示
+                    recipient.sendMessage(displaySender + encryptedMessage);
+                }
             }
         }
         event.setCancelled(true);
