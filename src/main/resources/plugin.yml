@@ -1,0 +1,4 @@
+name: ChatEncrypt
+version: '${project.version}'
+main: net.z4te.chatencrypt.Main
+api-version: '1.21'
