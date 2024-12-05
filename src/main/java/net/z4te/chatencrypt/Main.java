@@ -1,6 +1,5 @@
 package net.z4te.chatencrypt;
 
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +21,6 @@ public final class Main extends JavaPlugin implements Listener {
         // Plugin startup logic
         getServer().getPluginManager().registerEvents(this, this);
         secretKey = generateSecretKey();
-        getLogger().info("");
     }
 
     @Override
@@ -37,14 +35,14 @@ public final class Main extends JavaPlugin implements Listener {
 
         String encryptedMessage = encryptAES(message);
 
-        String formattedMessage = String.format("<%s> %s");
+        String displaySender = String.format("<%s> ",sender.getName());
 
         for(Player recipient : Bukkit.getOnlinePlayers()) {
             if (recipient.hasPermission("encrypt.use")) {
                 String decryptedMessage = decryptAES(encryptedMessage);
-                recipient.sendMessage(sender.getName() + ":" + decryptedMessage);
+                recipient.sendMessage(displaySender + decryptedMessage);
             } else {
-                recipient.sendMessage(sender.getName() + ":" + encryptedMessage);
+                recipient.sendMessage(displaySender + encryptedMessage);
             }
         }
         event.setCancelled(true);
