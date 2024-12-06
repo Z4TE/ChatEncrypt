@@ -40,7 +40,7 @@ public final class Main extends JavaPlugin implements Listener {
         String displaySender = String.format("<%s> ",sender.getName());
 
         // コンソールに平文を表示
-        getLogger().info(displaySender + message);
+        Bukkit.getConsoleSender().sendMessage(displaySender + encryptedMessage);
 
         for(Player recipient : Bukkit.getOnlinePlayers()) {
             // 送信者自身のチャットは平文を表示
