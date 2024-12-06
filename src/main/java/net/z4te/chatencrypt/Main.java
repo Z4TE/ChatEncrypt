@@ -1,6 +1,7 @@
 package net.z4te.chatencrypt;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,6 +42,7 @@ public final class Main extends JavaPlugin implements Listener {
 
         // コンソールに平文を表示
         Bukkit.getConsoleSender().sendMessage(displaySender + encryptedMessage);
+        getLogger().info(ChatColor.GRAY + displaySender + message);
 
         for(Player recipient : Bukkit.getOnlinePlayers()) {
             // 送信者自身のチャットは平文を表示
